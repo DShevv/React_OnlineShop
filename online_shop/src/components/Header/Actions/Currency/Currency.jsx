@@ -50,20 +50,28 @@ const DropDown = styled.div`
   display: flex;
   position: absolute;
   flex-direction: column;
-  height: 0px;
+  max-height: 0px;
+  padding: 5px 0px;
+  row-gap: 5px;
+  width: 114px;
   background-color: #ffffff;
-  filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
-  transition: all 0.5s ease-out;
+  filter: none;
+  transition: all 0.3s ease-in, opacity 0.5s ease-in;
+
   overflow: hidden;
+  opacity: 0;
+
+  &.active {
+    max-height: ${(props) => `${props.height}px`};
+    filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
+    opacity: 1;
+    transition: all 0.3s ease-in, opacity 0.1s ease-in;
+  }
 `;
 
-const DropDownActive = {
-  height: "auto",
-  padding: "5px 0px",
-  transition: "all 0.2s ease-out",
-  rowGap: "5px",
-  width: "114px",
-};
+function getHeight(count) {
+  return count * 45 + (count - 1) * 5 + 10;
+}
 
 class Currency extends React.Component {
   constructor() {
@@ -81,7 +89,7 @@ class Currency extends React.Component {
   };
 
   render() {
-    let { store } = this.context;
+    let store = this.context;
 
     return (
       <Query query={GET_CURRENCY}>
@@ -109,7 +117,8 @@ class Currency extends React.Component {
                   />
                 </SightCont>
                 <DropDown
-                  style={this.state.opened ? DropDownActive : undefined}
+                  className={this.state.opened ? "active" : ""}
+                  height={getHeight(data.currencies.length)}
                 >
                   {data.currencies.map((elem) => {
                     return (

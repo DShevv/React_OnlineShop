@@ -5,6 +5,7 @@ import { Context } from "../../../../../context/Context";
 const StyledItem = styled.div`
   width: 100%;
   height: 45px;
+  min-height: 45px;
   padding-left: 20px;
   display: flex;
   align-items: center;
@@ -25,19 +26,21 @@ const StyledItem = styled.div`
 
 class Item extends React.Component {
   render() {
-    let { store } = this.context;
     return (
-      <StyledItem
-        onClick={(e) => {
-          store.setCurrency(this.props.cur);
-          this.props.close();
-        }}
-      >
-        {this.props.children}
-      </StyledItem>
+      <Context.Consumer>
+        {(store) => (
+          <StyledItem
+            onClick={(e) => {
+              store.setCurrency(this.props.cur);
+              this.props.close();
+            }}
+          >
+            {this.props.children}
+          </StyledItem>
+        )}
+      </Context.Consumer>
     );
   }
 }
-Item.contextType = Context;
 
 export default Item;
