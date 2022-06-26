@@ -43,7 +43,6 @@ class Category extends React.Component {
           {({ loading, error, data }) => {
             if (error) return <div>Error</div>;
             if (loading || !data) return <div>Loading..</div>;
-            console.log(data);
             return (
               <ItemsContainer>
                 {data.category.products.map((elem) => {

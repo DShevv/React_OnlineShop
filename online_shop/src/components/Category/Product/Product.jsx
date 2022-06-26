@@ -47,15 +47,22 @@ const Container = styled(NavLink)`
   }
 
   &.out {
-    filter: opacity(0.5);
-    cursor: default;
+    transition: all 0.2s ease;
 
+    &:hover {
+      transition: all 0.2s ease;
+      filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
+    }
     &::after {
       content: "OUT OF STOCK";
       position: absolute;
       top: 50%;
       left: 50%;
-
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-transform: uppercase;
       font-family: "Raleway";
       font-style: normal;
@@ -63,7 +70,8 @@ const Container = styled(NavLink)`
       font-size: 24px;
       line-height: 160%;
       color: #000000;
-
+      background-color: #ffffff;
+      filter: opacity(0.5);
       transform: translate(-50%, -50%);
     }
   }
@@ -109,6 +117,7 @@ class Product extends React.Component {
         to={this.props.data.id}
         stock={this.props.data.inStock ? 1 : 0}
         className={this.props.data.inStock ? "" : "out"}
+        disabled={this.props.data.inStock}
       >
         <Image src={this.props.data.gallery[0]} alt={this.props.data.name} />
         <Caption>

@@ -7,6 +7,7 @@ import { Query } from "@apollo/client/react/components";
 
 import { GET_CATEGORIES } from "./queries/queries";
 import Category from "./components/Category/Category";
+import Details from "./components/Details/Details";
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,17 +26,19 @@ class App extends React.Component {
       if (itemIndex !== -1) {
         this.setState((prev, props) => ({
           ...prev,
-          bag: prev.bag.map((elem, index) => {
-            if (elem.id === item.id) {
-              elem.count += 1;
-            }
-            return elem;
-          }),
+          bag: [
+            ...prev.bag.map((elem, index) => {
+              if (elem.id === item.id) {
+                elem.count += 1;
+              }
+              return elem;
+            }),
+          ],
         }));
       } else {
         this.setState((prev, props) => ({
           ...prev,
-          bag: prev.bag.push({ ...item, count: 1 }),
+          bag: [...prev.bag, { ...item, count: 1 }],
         }));
       }
     };
@@ -68,6 +71,10 @@ class App extends React.Component {
     };
   }
 
+  componentDidUpdate() {
+    console.log(this.state.bag);
+  }
+
   render() {
     return (
       <Context.Provider value={this.state}>
@@ -83,22 +90,22 @@ class App extends React.Component {
                     {data.categories.map((elem, index) => {
                       if (index === 0) {
                         return (
-                          <Route
-                            key={elem}
-                            path="/"
-                            element={<Category category={elem.name} />}
-                          >
-                            <Route path=":id" element={<div>item</div>} />
+                          <Route key={elem} path="/">
+                            <Route
+                              index
+                              element={<Category category={elem.name} />}
+                            />
+                            <Route path=":id" element={<Details />} />
                           </Route>
                         );
                       } else {
                         return (
-                          <Route
-                            key={elem}
-                            path={elem.name}
-                            element={<Category category={elem.name} />}
-                          >
-                            <Route path=":id" element={<div>item</div>} />
+                          <Route key={elem} path={elem.name}>
+                            <Route
+                              index
+                              element={<Category category={elem.name} />}
+                            />
+                            <Route path=":id" element={<Details />} />
                           </Route>
                         );
                       }
